@@ -1,0 +1,26 @@
+--create a Pokemon database
+
+CREATE TABLE Pokemon (pokedex_entry integer primary key, name text, typing text, legendary text, price integer);
+
+Insert into Pokemon Values (94, "Gengar", "Ghost/Poison", "No", 1000);
+Insert into Pokemon values (376, "Metagross", "Metal/Psychic", "No", 5000);
+Insert into Pokemon values (384, "Rayquaza", "Dragon/Flying", "Yes", 10000);
+Insert into Pokemon values (143, "Snorlax", "Normal", "No", 800);
+Insert into Pokemon values (491, "Darkrai", "Dark", "Yes", 8000);
+Insert into Pokemon values (487, "Giratina", "Ghost/Dragon", "Yes", 9000);
+Insert into Pokemon values (6, "Charizard", "Fire/Flying", "No", 1200);
+Insert into Pokemon values (387, "Turtwig", "Grass", "No", 80);
+Insert into Pokemon values (306, "Aggron", "Steel/Rock", "No", 5000);
+Insert into Pokemon values (959, "Tinkaton", "Fairy/Steel", "No", 4000);
+Insert into Pokemon values (104, "Cubone", "Ground", "No", 200);
+Insert into Pokemon values (199, "Slowking", "Water/Psychic", "No", 6000);
+Insert into Pokemon values (493, "Arceus", "Normal", "Yes", 400000);
+Insert into Pokemon values (150, "Mewtwo", "Psychic", "Yes", 500000);
+Insert into Pokemon values (151, "Mew", "Psychic", "Yes", 500001);
+
+Select * From Pokemon;
+
+Select * From Pokemon
+Order by price;
+
+Select sum(price) from Pokemon
