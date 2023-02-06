@@ -98,7 +98,7 @@ FROM card_games
     GROUP BY player_name
     ORDER BY average_score_crazy_eights;
 
---What are the dates and scores of Marcimus and Spunky of when they played Go Fish?
+--What are the dates and scores of Marcimus and Spunky Sam of when they played Go Fish?
 SELECT * FROM card_games
     WHERE player_name = "Marcimus" AND game_name = "Go Fish" OR player_name = "Spunky Sam" AND game_name = "Go Fish"
     ORDER BY player_name;
