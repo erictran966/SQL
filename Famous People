@@ -1,0 +1,56 @@
+/* Create table about the people and what they do here */
+CREATE TABLE actors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    age INTEGER);
+    
+INSERT INTO actors (name, age) VALUES ("Chris Evans", 41);
+INSERT INTO actors (name, age) VALUES ("Ryan Reynolds", 46);
+INSERT INTO actors (name, age) VALUES ("John Krasinski", 43);
+INSERT INTO actors (name, age) VALUES ("Emily Blunt", 40);
+INSERT INTO actors (name, age) VALUES ("Penelope Cruz", 48);
+INSERT INTO actors (name, age) VALUES ("Javier Bardem", 54);
+INSERT INTO actors (name, age) VALUES ("Adam Driver", 38);
+INSERT INTO actors (name, age) VALUES ("Sandra Bullock", 58);
+
+CREATE TABLE movies (id INTEGER PRIMARY KEY AUTOINCREMENT,
+title TEXT,
+actor_id INTEGER,
+release_year INTEGER);
+
+INSERT INTO movies (title, actor_id, release_year) VALUES ("Free Guy", 1, 2021);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("Free Guy", 2, 2021);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("A Quiet Place", 3, 2018);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("A Quiet Place", 4, 2018);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("A Quiet Place Part 2", 3, 2021);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("A Quiet Place Part 2", 4, 2021);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("G-Force", 5, 2009);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("No Country For Old Men", 6, 2007);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("Marriage Story", 7, 2019);
+INSERT INTO movies (title, actor_id, release_year) VALUES ("The Blind Side", 8, 2009);
+
+CREATE TABLE married (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor1_id INTEGER,
+    actor2_id INTEGER);
+
+INSERT INTO married (actor1_id, actor2_id) VALUES (3, 4);
+INSERT INTO married (actor1_id, actor2_id) VALUES (6, 5);
+
+/* Created a table of actors that are married to each other */
+SELECT a.name AS husband, b.name AS wife FROM married
+    JOIN actors a
+    ON married.actor1_id=a.id
+    JOIN actors b
+    ON married.actor2_id=b.id;
+
+/* Compared which actors appeared in which films and provided the year the film was released */
+SELECT actors.name, movies.title, movies.release_year FROM actors
+    LEFT OUTER JOIN movies
+    ON actors.id = movies.actor_id
+    ORDER BY release_year;
+    
+/* Filtered actors who were above the age of 45 in descending order */
+SELECT name, age FROM actors
+    WHERE age > 45
+    ORDER BY age desc;
