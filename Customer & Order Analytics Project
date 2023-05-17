@@ -44,4 +44,3 @@ ON FebSales.orderid=customers.order_id
 WHERE FebSales.Quantity>2
 AND length(orderid) = 6 
 AND orderid <> 'Order ID'
-
