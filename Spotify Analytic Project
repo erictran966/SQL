@@ -1,0 +1,119 @@
+# For this project, I downloaded Spotify data from Kaggle.
+# Then I created a table to insert Spotify data into.
+# Finally, I performed analytics on the data using SQL. 
+
+#Creating the table: 
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+#Then I inserted the Spotify Data .csv into the table.
+
+#Next, I explored the data using the following SQL. 
+
+/* Which locations in New York received at least 3 orders in January, and how many orders did they each receive? */
+SELECT DISTINCT location , COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE location LIKE '%NY%'
+AND length(orderID) = 6
+AND orderID <> 'Order ID'
+GROUP BY location
+HAVING count(orderID) >= 3;
+
+/* How many of each type of headphone were sold in February? */
+SELECT product, SUM(quantity) AS quantity
+FROM BIT_DB.FebSales
+WHERE product LIKE '%Headphone%'
+GROUP BY product;
+
+/* What was the average amount spent per account in February? */
+SELECT AVG(quantity*price)
+FROM BIT_DB.FebSales 
+LEFT JOIN BIT_DB.customers 
+ON FebSales.orderid=customers.order_id
+WHERE length(orderid) = 6 
+AND orderid <> 'Order ID';
+
+/* What was the average quantity of products purchased per account in February? */
+SELECT SUM(quantity)/COUNT(customers.acctnum) AS avg_product_per_customer
+FROM BIT_DB.FebSales
+LEFT JOIN BIT_DB.customers
+ON FebSales.orderID=customers.order_id
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID';
+
+/* Which product brought in the most revenue in January and how much revenue did it bring in total? */
+SELECT product, SUM(quantity*price) AS revenue
+FROM BIT_DB.JanSales
+GROUP BY product
+ORDER BY revenue DESC
+LIMIT 1;
+
+/* What is the average danceability by artist and track from most to least danceable? */
+SELECT artist_name, track_name, AVG(danceability) 
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name, track_name 
+ORDER BY AVG(danceability) DESC;
+
+/*  Who are the top 10 tracks based on popularity? */
+SELECT artist_name, track_name, popularity
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10;
+
+/*  What artist released the longest song? */
+SELECT artist_name, track_name, duration_ms
+FROM BIT_DB.Spotifydata
+ORDER BY duration_ms DESC
+LIMIT 1;
+
+/*  What's the average danceability for the 10 most popular songs? */
+SELECT artist_name, track_name, popularity, AVG(danceability) 
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name, track_name 
+ORDER BY popularity DESC
+LIMIT 10;
+
+/* Identify the top 5 artists with the highest average danceability among their top 10 most popular songs. */
+SELECT artist_name, AVG(danceability) AS average_danceability
+FROM BIT_DB.Spotifydata
+WHERE id IN (
+SELECT id
+FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10
+)
+GROUP BY artist_name
+ORDER BY average_danceability DESC
+LIMIT 5;
+
+/* Find the artist who has the highest variation in tempo among their songs */
+SELECT artist_name, MAX(tempo) - MIN(tempo) AS tempo_variation
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY tempo_variation DESC
+LIMIT 1;
+
+/* Determine the artist(s) with the most diverse range of keys in their songs */
+SELECT artist_name, COUNT(DISTINCT song_key) AS unique_keys
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY unique_keys DESC
+LIMIT 1;
